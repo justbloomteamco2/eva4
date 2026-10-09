@@ -11,8 +11,8 @@ export function ServiceCard({ service }) {
       <div className="service-card-copy">
         <h3>{service.title}</h3>
         <p className="service-card-description">{service.description}</p>
-        <a className="service-card-link" href="/consultation">
-          Discuss this service <span aria-hidden="true">↗</span>
+        <a className="service-card-link" href={`/services/${service.id}`}>
+          Explore service <span aria-hidden="true">↗</span>
         </a>
       </div>
     </article>);

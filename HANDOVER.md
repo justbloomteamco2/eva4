@@ -21,14 +21,23 @@ document or commit `.env.local`.
 - Email: a successful local send was tested. The configured sender currently
   uses Resend's shared test domain; verify a domain you own and change the
   sender address before public production email.
-- Source control: this local folder was not initialized as a Git repository
-  and had no remote configured at the last check. It has not been pushed.
+- Source control: Git is initialized on `main`, with `origin` configured.
+  At the last remote sync, the local branch matched `origin/main`. The current
+  website changes remain local and have not been committed or pushed.
+- Current deployment: `https://eva4-lddt.vercel.app/` serves the main and
+  consultation pages, but `GET /api/reviews` returned HTTP 503 during the
+  latest check. Do not treat the production backend as verified until the
+  Vercel function logs have been checked and that endpoint returns HTTP 200.
 
 ## Services and routes
 
 | Purpose | Location |
 | --- | --- |
 | Main website | `/` |
+| Services overview and details | `/services`, `/services/[service]` |
+| Company story | `/about` |
+| Client feedback | `/reviews` |
+| Contact details and location | `/contact` |
 | Consultation form | `/consultation` |
 | Create consultation request | `POST /api/consultations` |
 | Read approved feedback | `GET /api/reviews` |
@@ -70,20 +79,24 @@ records through a public read policy.
 
 ## Deploying from GitHub
 
-1. Initialize Git in the project folder, review the staged file list, and
-   confirm `.env.local`, generated output, and `reference/` materials are not
-   staged.
-2. Create a private or public GitHub repository as appropriate, add it as the
-   `origin` remote, and push the default branch.
-3. Import that repository in Vercel. Keep the detected Next.js framework and
-   default commands (`npm install`, `npm run build`); do not set an output
-   directory or static-export setting.
-4. Add the five production environment variables above. Use a verified Resend
-   sender domain before accepting public enquiries.
-5. Deploy and verify the production URL using the checks below.
+The repository is already connected to its GitHub `origin` on `main`. Before
+deploying, review `git status` and `git diff`, run `npm test` and
+`npm run build`, then commit and push intended changes. Confirm `.env.local`,
+generated output, and `reference/` materials are not included.
 
-The `reference/` folder contains the brand-book PDF and supplied videos for
-local reference; it is not required to build or deploy the site. The current
+1. Import the existing GitHub repository in Vercel. Keep the detected Next.js
+   framework and default commands (`npm install`, `npm run build`); do not set
+   an output directory or static-export setting.
+2. Add the five production environment variables above. Use a verified Resend
+   sender domain before accepting public enquiries.
+3. Deploy and verify the production URL using the checks below.
+
+The `reference/` folder contains source photos, supplied videos, and a business
+license for local reference; it is not required to build or deploy the site
+and is excluded from Git. Do not publish the license or candid reference
+photos. The selected founder-video still and discreet team photo used by the
+site are stored under `public/assets/`; the photographic assets use WebP where
+that format reduces file size. The original logo remains unchanged. The current
 `.gitignore` also excludes local-only configuration and unrelated workspace
 files from the website repository.
 

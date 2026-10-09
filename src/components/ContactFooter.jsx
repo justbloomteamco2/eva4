@@ -1,12 +1,13 @@
 "use client";
 import Image from "next/image";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { ClientFeedbackForm } from "@/components/ClientFeedbackForm";
 import { useSiteServices } from "@/components/SiteServicesProvider";
 export function ContactFooter() {
     const { content } = useSiteServices();
     const contact = content.getContact();
-    return (<footer id="contact" className="contact-footer" aria-label="Contact Spartan Security Solutions">
+    const phone = contact.phone[0];
+    const phoneDigits = phone.replace(/\D/g, "");
+    return (<footer className="contact-footer" aria-label="Contact Spartan Security Solutions">
       <div className="footer-cta">
         <div>
           <p className="eyebrow"><span /> Begin with a conversation</p>
@@ -17,13 +18,17 @@ export function ContactFooter() {
           <ButtonLink variant="primary" href="/consultation">
             Request a consultation <span aria-hidden="true">↗</span>
           </ButtonLink>
+          <a className="footer-direct-contact" href={`tel:${phone.replace(/[^\d+]/g, "")}`}>
+            Call {phone} <span aria-hidden="true">↗</span>
+          </a>
+          <a className="footer-direct-contact" href={`https://wa.me/${phoneDigits}?text=${encodeURIComponent("Hello Spartan Security Solutions, I would like to know more about your services.")}`} target="_blank" rel="noopener noreferrer">
+            WhatsApp us <span aria-hidden="true">↗</span>
+          </a>
           <a className="footer-instagram-cta" href="https://www.instagram.com/armsspartan/" target="_blank" rel="noopener noreferrer">
             For more updates, find us on Instagram <span aria-hidden="true">↗</span>
           </a>
         </div>
       </div>
-
-      <ClientFeedbackForm />
 
       <div className="footer-wordmark" aria-hidden="true">SPARTAN</div>
       <div className="footer-details">
@@ -42,6 +47,7 @@ export function ContactFooter() {
             {contact.phone.map((phone) => (
               <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} key={phone}>{phone}</a>
             ))}
+            <a href={`https://wa.me/${phoneDigits}?text=${encodeURIComponent("Hello Spartan Security Solutions, I would like to know more about your services.")}`} target="_blank" rel="noopener noreferrer">Message us on WhatsApp</a>
           </div>
         </div>
 
@@ -55,7 +61,7 @@ export function ContactFooter() {
           <a className="footer-instagram-link" href="https://www.instagram.com/armsspartan/" target="_blank" rel="noopener noreferrer">
             Instagram <span aria-hidden="true">↗</span>
           </a>
-          <a className="back-to-top" href="/#home">Back to top ↑</a>
+          <a className="back-to-top" href="/">Back to top ↑</a>
         </div>
       </div>
       <div className="footer-bottom">

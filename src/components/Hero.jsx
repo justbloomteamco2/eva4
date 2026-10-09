@@ -2,12 +2,16 @@
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ButtonLink } from "@/components/ui/ButtonLink";
+import { useSiteServices } from "@/components/SiteServicesProvider";
 const headline = ["Trusted security.", "A safer tomorrow."];
 const section = {
     id: "home",
     title: "Trusted security. A safer tomorrow.",
 };
 export function Hero() {
+    const { content } = useSiteServices();
+    const phone = content.getContact().phone[0];
+    const phoneDigits = phone.replace(/\D/g, "");
     const reduceMotion = useReducedMotion();
     let staggerIndex = 0;
     return (<section id={section.id} className="hero-section">
@@ -46,12 +50,15 @@ export function Hero() {
             </span>))}
         </h1>
         <motion.p className="hero-copy" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : 1.4, duration: reduceMotion ? 0 : 0.7 }}>
-          Professionalism in every detail. Unshakeable reliability in every promise.
+          Professionalism in every detail. Unshakeable reliability you can count on.
         </motion.p>
         <motion.div className="hero-actions" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : 1.55, duration: reduceMotion ? 0 : 0.65 }}>
-          <ButtonLink variant="primary" href="/consultation">
-            Get free consultation <span aria-hidden="true">↓</span>
+          <ButtonLink variant="primary" href={`tel:${phone.replace(/[^\d+]/g, "")}`}>
+            Call now <span aria-hidden="true">↗</span>
           </ButtonLink>
+          <a className="button hero-whatsapp" href={`https://wa.me/${phoneDigits}?text=${encodeURIComponent("Hello Spartan Security Solutions, I would like to know more about your services.")}`} target="_blank" rel="noopener noreferrer">
+            WhatsApp us <span aria-hidden="true">↗</span>
+          </a>
           <a className="text-link" href="#approach">Our approach <span aria-hidden="true">↗</span></a>
         </motion.div>
       </div>

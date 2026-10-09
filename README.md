@@ -20,6 +20,14 @@ npm test
 npm run build
 ```
 
+## Main pages
+
+- `/services` and `/services/[service]` for service overviews and details
+- `/about` for the company story and approach
+- `/reviews` for client feedback
+- `/contact` for contact details and location
+- `/consultation` for consultation requests
+
 ## Technology
 
 - Next.js 14 App Router, React, JavaScript, and CSS
