@@ -67,6 +67,9 @@ export function ContactFooter() {
       <div className="footer-bottom">
         <span>© {new Date().getFullYear()} Spartan Security Solutions</span>
         <span>Professional&nbsp; / &nbsp;Reliable&nbsp; / &nbsp;Trusted</span>
+        <a href="https://justbloom.com.co/" target="_blank" rel="noopener noreferrer">
+          Website by Justbloom
+        </a>
       </div>
     </footer>);
 }

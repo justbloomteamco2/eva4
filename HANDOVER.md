@@ -93,12 +93,15 @@ generated output, and `reference/` materials are not included.
 
 The `reference/` folder contains source photos, supplied videos, and a business
 license for local reference; it is not required to build or deploy the site
-and is excluded from Git. Do not publish the license or candid reference
-photos. The selected founder-video still and discreet team photo used by the
-site are stored under `public/assets/`; the photographic assets use WebP where
-that format reduces file size. The original logo remains unchanged. The current
-`.gitignore` also excludes local-only configuration and unrelated workspace
-files from the website repository.
+and is excluded from Git. Keep the license scan and candid reference photos
+private; the About page displays only the PSARA region and validity statement.
+Review that statement against the renewed license when it expires. The selected
+founder-video still, discreet team photo, and compressed security-team clip on
+the security service page are stored under `public/assets/`; original shoot
+footage remains private. The photographic assets use WebP where that format
+reduces file size. The original logo remains unchanged. The current `.gitignore`
+also excludes local-only configuration and unrelated workspace files from the
+website repository.
 
 ## Production smoke checks
 

@@ -59,6 +59,19 @@ export default async function ServiceDetailPage({ params }) {
               sizes="(max-width: 760px) 100vw, 48vw"
               style={{ objectPosition: service.imagePosition }}
             />
+            {service.id === "security" && (
+              <video
+                className="service-detail-video"
+                src="/assets/services/security-briefing.mp4"
+                poster={service.image}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-hidden="true"
+              />
+            )}
             <span>{service.number} / 04</span>
           </div>
         </section>
