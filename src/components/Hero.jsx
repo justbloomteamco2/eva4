@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ButtonLink } from "@/components/ui/ButtonLink";
 import { useSiteServices } from "@/components/SiteServicesProvider";
@@ -13,18 +13,36 @@ export function Hero() {
     const phone = content.getContact().phone[0];
     const phoneDigits = phone.replace(/\D/g, "");
     const reduceMotion = useReducedMotion();
+    const videoRef = useRef(null);
+    useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+        const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const syncPlayback = () => {
+            if (motionPreference.matches) {
+                video.pause();
+                return;
+            }
+            video.play().catch((error) => console.error("Hero video playback failed:", error));
+        };
+        syncPlayback();
+        motionPreference.addEventListener("change", syncPlayback);
+        return () => motionPreference.removeEventListener("change", syncPlayback);
+    }, []);
     let staggerIndex = 0;
     return (<section id={section.id} className="hero-section">
       <div className="hero-image-wrap" aria-hidden="true">
-        <div className="hero-image-art"/>
-        <Image
-          className="hero-watermark"
-          src="/assets/brand/spartan-seal.png"
-          alt=""
-          width={520}
-          height={520}
-          priority
-        />
+        <video
+          ref={videoRef}
+          className="hero-video"
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster="/assets/hero/security-check-poster.webp"
+        >
+          <source src="/assets/hero/security-check.mp4" type="video/mp4" />
+        </video>
       </div>
       <div className="hero-shade" aria-hidden="true"/>
       <div className="hero-grid" aria-hidden="true"/>
@@ -38,10 +56,10 @@ export function Hero() {
           {headline.map((line) => (<span className="headline-line" key={line} aria-hidden="true">
               {line.split(" ").map((word) => (<span className="headline-word" key={word}>
                   {Array.from(word).map((letter, index) => {
-                    const delay = 0.2 + staggerIndex * 0.025;
+                    const delay = 0.12 + staggerIndex * 0.012;
                     staggerIndex += 1;
                     return (<span className="letter-window" key={`${word}-${index}`}>
-                        <motion.span className="headline-letter" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : delay, duration: reduceMotion ? 0 : 0.85 }}>
+                        <motion.span className="headline-letter" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : delay, duration: reduceMotion ? 0 : 0.5 }}>
                           {letter}
                         </motion.span>
                       </span>);
@@ -49,10 +67,10 @@ export function Hero() {
                 </span>))}
             </span>))}
         </h1>
-        <motion.p className="hero-copy" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : 1.4, duration: reduceMotion ? 0 : 0.7 }}>
+        <motion.p className="hero-copy" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : 0.55, duration: reduceMotion ? 0 : 0.45 }}>
           Professionalism in every detail. Unshakeable reliability you can count on.
         </motion.p>
-        <motion.div className="hero-actions" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : 1.55, duration: reduceMotion ? 0 : 0.65 }}>
+        <motion.div className="hero-actions" initial={reduceMotion ? false : { opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: reduceMotion ? 0 : 0.68, duration: reduceMotion ? 0 : 0.42 }}>
           <ButtonLink variant="primary" href={`tel:${phone.replace(/[^\d+]/g, "")}`}>
             Call now <span aria-hidden="true">↗</span>
           </ButtonLink>

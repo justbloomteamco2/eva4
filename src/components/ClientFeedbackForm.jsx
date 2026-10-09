@@ -64,14 +64,14 @@ export function ClientFeedbackForm() {
             const response = await fetch("/api/reviews", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...form, name: form.name.trim(), quote: form.quote.trim(), role: form.role.trim() || "Verified client" }),
+                body: JSON.stringify({ ...form, name: form.name.trim(), quote: form.quote.trim(), role: form.role.trim() || "Client" }),
             });
             const data = (await response.json());
             if (!response.ok) {
                 throw new Error(data.error ?? "Unable to save your feedback.");
             }
             setForm(initialForm);
-            setStatus({ type: "success", message: data.message ?? "Thank you. Your feedback is now live." });
+            setStatus({ type: "success", message: data.message ?? "Thank you. Your feedback will be reviewed before it appears." });
             void loadFeedback();
         }
         catch (error) {
@@ -134,7 +134,7 @@ export function ClientFeedbackForm() {
       </div>
 
       <div className="feedback-list" aria-label="Recent visitor feedback">
-        <h3>Live client feedback</h3>
+        <h3>Published client feedback</h3>
         {loadingFeedback ? (<p className="empty-state" role="status">Loading client feedback…</p>) : loadError && feedback.length === 0 ? (<p className="empty-state" role="status">{loadError}</p>) : feedback.length === 0 ? (<p className="empty-state">No approved reviews yet. Be the first to share your experience.</p>) : (feedback.slice(0, 4).map((item) => (<article key={`${item.name}-${item.createdAt ?? item.role}`} className="mini-review">
               <div className="mini-review-header">
                 <strong>{item.name}</strong>

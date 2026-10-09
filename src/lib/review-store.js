@@ -26,7 +26,7 @@ export function sanitizeReview(input) {
         throw new ReviewValidationError("Submit a valid feedback request.");
     }
     const name = textField(input.name, "name", 120, true);
-    const role = textField(input.role, "role", 120, false) || "Verified client";
+    const role = textField(input.role, "role", 120, false) || "Client";
     const quote = textField(input.quote, "experience", 220, true);
     const service = input.service;
     if (typeof service !== "string" || !services.has(service)) {
@@ -51,7 +51,7 @@ export async function writeReview(input) {
     const [saved] = await supabaseRequest("reviews", {
         method: "POST",
         headers: { Prefer: "return=representation" },
-        body: JSON.stringify({ ...review, status: "approved" }),
+        body: JSON.stringify({ ...review, status: "pending" }),
     });
     return saved;
 }

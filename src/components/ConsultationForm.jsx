@@ -1,4 +1,5 @@
 "use client";
+import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 const initialForm = {
     name: "",
@@ -7,6 +8,7 @@ const initialForm = {
     serviceType: "Security services",
 };
 export function ConsultationForm() {
+    const reduceMotion = useReducedMotion();
     const [form, setForm] = useState(initialForm);
     const [submitting, setSubmitting] = useState(false);
     const [status, setStatus] = useState(null);
@@ -41,7 +43,14 @@ export function ConsultationForm() {
             setSubmitting(false);
         }
     };
-    return (<div id="consultation" className="consultation-wrap">
+    return (<motion.div
+      id="consultation"
+      className="consultation-wrap"
+      initial={reduceMotion ? false : { opacity: 0, y: 26, scale: 0.985 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="consultation-form-heading">
         <p className="consultation-form-kicker">Secure, no-obligation enquiry</p>
         <h2>Request a free consultation</h2>
@@ -74,5 +83,5 @@ export function ConsultationForm() {
         </button>
       </form>
       {status && <p id="consultation-status" className={`form-status ${status.type}`} role="status" aria-live="polite">{status.message}</p>}
-    </div>);
+    </motion.div>);
 }

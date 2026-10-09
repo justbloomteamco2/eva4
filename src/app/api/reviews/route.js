@@ -32,7 +32,7 @@ export async function POST(request) {
         const payload = await readJson(request, 8192);
         const review = await writeReview(payload);
         return NextResponse.json(
-            { message: "Thank you. Your feedback is now live.", review },
+            { message: "Thank you. Your feedback will be reviewed before it appears.", review },
             { status: 202 }
         );
     }

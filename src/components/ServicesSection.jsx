@@ -16,7 +16,7 @@ export function ServicesSection() {
         <p className="section-aside">Four essential disciplines.<br />One dependable standard.</p>
       </div>
       <div className="services-rail" aria-label="Core service categories">
-        {content.getServices().map((service) => (<ServiceCard service={service} key={service.id}/>))}
+        {content.getServices().map((service, index) => (<ServiceCard service={service} index={index} key={service.id}/>))}
       </div>
     </section>);
 }

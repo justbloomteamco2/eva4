@@ -1,10 +1,13 @@
+"use client";
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 
 const section = {
   id: "approach",
   title: "Quiet confidence. Every day.",
 };
 export function AboutSection() {
+  const reduceMotion = useReducedMotion();
   return (
     <>
       <section id={section.id} className="approach-section">
@@ -65,16 +68,30 @@ export function AboutSection() {
       </section>
       <section className="founder-story" aria-labelledby="founder-story-title">
         <div className="founder-story-intro">
-          <div className="founder-story-photo">
-            <Image
-              src="/assets/brand/founder-uma-shankar.webp"
-              alt="Founder Uma Shankar speaking about his career and the founding of Spartan Security Solutions"
-              fill
-              sizes="(max-width: 760px) 100vw, 42vw"
-            />
+          <motion.div
+            className="founder-story-photo"
+            initial={reduceMotion ? false : { opacity: 0, clipPath: "inset(12% 12% 12% 12%)" }}
+            whileInView={{ opacity: 1, clipPath: "inset(0% 0% 0% 0%)" }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="founder-story-image">
+              <Image
+                src="/assets/brand/founder-uma-shankar.webp"
+                alt="Founder Uma Shankar speaking about his career and the founding of Spartan Security Solutions"
+                fill
+                sizes="(max-width: 760px) 100vw, 42vw"
+              />
+            </div>
             <span>Built on service since 2016</span>
-          </div>
-          <div className="founder-story-copy">
+          </motion.div>
+          <motion.div
+            className="founder-story-copy"
+            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.45, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+          >
             <p className="eyebrow">
               <span /> Our story
             </p>
@@ -91,50 +108,43 @@ export function AboutSection() {
               200 guards at a single location. Our standard starts with treating
               every client and every guard with respect.
             </p>
-          </div>
+          </motion.div>
         </div>
 
         <div className="founder-story-stats" aria-label="Spartan at a glance">
-          <div>
-            <strong>2016</strong>
-            <span>Founded by Uma Shankar</span>
-          </div>
-          <div>
-            <strong>100+</strong>
-            <span>Clients who trust our teams</span>
-          </div>
-          <div>
-            <strong>200+</strong>
-            <span>Guards deployable at one location</span>
-          </div>
+          {[{ value: "2016", label: "Founded by Uma Shankar" }, { value: "100+", label: "Clients who trust our teams" }, { value: "200+", label: "Guards deployable at one location" }].map((stat, index) => (
+          <motion.div
+            key={stat.value}
+            initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.7 }}
+            transition={{ duration: 0.4, delay: index * 0.06, ease: "easeOut" }}
+          >
+            <strong>{stat.value}</strong>
+            <span>{stat.label}</span>
+          </motion.div>
+          ))}
         </div>
 
         <div className="founder-story-standards">
-          <article>
-            <span>01 / Open books</span>
-            <h3>Compliance without compromise.</h3>
-            <p>
-              Licensed in Karnataka under PSARA through November 2027, with
-              transparent operations and required worker protections including
-              PF and ESI.
-            </p>
-          </article>
-          <article>
-            <span>02 / People first</span>
-            <h3>Respect the people who protect you.</h3>
-            <p>
-              We look after our guards and pay them on time, so they can stay
-              focused, alert and committed to your safety.
-            </p>
-          </article>
-          <article>
-            <span>03 / Our standard</span>
-            <h3>Your confidence comes first.</h3>
-            <p>
-              If you are unhappy with our service, you are free to cancel. We
-              want to earn your trust, not hold you to it.
-            </p>
-          </article>
+          {[
+            { label: "01 / Open books", title: "Compliance without compromise.", text: "Licensed in Karnataka under PSARA through November 2027, with transparent operations and required worker protections including PF and ESI." },
+            { label: "02 / People first", title: "Respect the people who protect you.", text: "We look after our guards and pay them on time, so they can stay focused, alert and committed to your safety." },
+            { label: "03 / Our standard", title: "Your confidence comes first.", text: "If you are unhappy with our service, you are free to cancel. We want to earn your trust, not hold you to it." },
+          ].map((standard, index) => (
+          <motion.article
+            key={standard.label}
+            initial={reduceMotion ? false : { opacity: 0, y: 30, scale: 0.96 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            whileHover={reduceMotion ? undefined : { y: -5, scale: 1.015 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.42, delay: index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span>{standard.label}</span>
+            <h3>{standard.title}</h3>
+            <p>{standard.text}</p>
+          </motion.article>
+          ))}
         </div>
       </section>
     </>

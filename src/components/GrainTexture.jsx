@@ -10,8 +10,8 @@ export function GrainTexture() {
             return;
         }
         const drawNoise = () => {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
+            const width = document.documentElement.clientWidth;
+            const height = document.documentElement.clientHeight;
             const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
             canvas.width = Math.ceil(width * ratio);
             canvas.height = Math.ceil(height * ratio);

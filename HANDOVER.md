@@ -11,10 +11,10 @@ document or commit `.env.local`.
 - Automated checks: `npm test`.
 - Hosting target: Vercel or another Next.js serverless host. Do not configure
   static export or GitHub Pages for this application.
-- Database: Supabase project is provisioned. Both migrations listed below
-  have been applied and verified.
-- Feedback: new reviews are approved and shown immediately. Remove unwanted
-  feedback from the Supabase `reviews` table.
+- Database: Supabase project is provisioned. Apply all migrations listed below
+  before deploying this update.
+- Feedback: public submissions remain pending until verified and approved in
+  the Supabase `reviews` table. Only approved feedback is public.
 - Consultation: submissions are saved to Supabase before an email notification
   is attempted. Check `notification_status` on a request if a notification is
   not received.
@@ -71,9 +71,13 @@ The deployed Supabase project must contain the schema and function from:
    — reviews, consultation requests, rate-limit storage, function, and initial
    approved feedback entries.
 2. `supabase/migrations/20261009080000_auto_approve_reviews.sql` — approves
-   existing feedback and changes the default status for new reviews.
+   existing feedback and sets its default to approved (superseded by migration
+   3 for new submissions).
+3. `supabase/migrations/20261009180000_public_review_moderation.sql` — sets
+   the default status for new reviews to `pending`.
 
-These migrations were applied through the Supabase SQL Editor. The app uses the
+The first two migrations were applied through the Supabase SQL Editor. Apply
+the new moderation migration before deploying this update. The app uses the
 service-role key only on server routes. Do not expose private consultation
 records through a public read policy.
 
@@ -91,11 +95,15 @@ generated output, and `reference/` materials are not included.
    sender domain before accepting public enquiries.
 3. Deploy and verify the production URL using the checks below.
 
-The `reference/` folder contains source photos, supplied videos, and a business
-license for local reference; it is not required to build or deploy the site
-and is excluded from Git. Keep the license scan and candid reference photos
-private; the About page displays only the PSARA region and validity statement.
-Review that statement against the renewed license when it expires. The selected
+The `reference/` folder contains source photos, supplied videos, and the
+original business license for local reference; it is not required to build or
+deploy the site and is excluded from Git. Keep the original license scan and
+candid reference photos private. The footer tucks away a redacted public license
+image, revealed by tapping or dragging its handle; its serial number, QR code,
+and applicant details are obscured. Review the displayed validity against the
+renewed license when it expires. The hero loop is a silent 1440×2560, 30fps
+H.264 MP4 with a WebP poster under `public/assets/hero/`; the original video
+remains private in `reference/`. The selected
 founder-video still, discreet team photo, and compressed security-team clip on
 the security service page are stored under `public/assets/`; original shoot
 footage remains private. The photographic assets use WebP where that format
@@ -110,8 +118,8 @@ After deployment:
 1. Open `/` and `/consultation`; verify navigation, responsive layout, and
    local images load.
 2. Confirm `GET /api/reviews` returns approved reviews.
-3. Submit one genuine feedback entry and confirm it appears in the feedback
-   list. Remove it from Supabase if it was only a test.
+3. Submit one genuine feedback entry and confirm it remains pending and does
+   not appear publicly until verified and approved in Supabase.
 4. Submit a consultation using an address you control. Confirm a row is
    recorded in `consultation_requests` and the notification arrives at
    `CONSULTATION_TO_EMAIL`.

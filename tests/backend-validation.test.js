@@ -17,6 +17,7 @@ const validReview = {
 
 test("review validation accepts bounded, supported feedback", () => {
     assert.deepEqual(sanitizeReview(validReview), validReview);
+    assert.equal(sanitizeReview({ ...validReview, role: "" }).role, "Client");
 });
 
 test("review validation rejects oversized and unsupported fields", () => {
@@ -34,7 +35,7 @@ test("review validation rejects oversized and unsupported fields", () => {
     );
 });
 
-test("new reviews are saved as approved", async () => {
+test("new reviews are saved as pending moderation", async () => {
     const originalFetch = globalThis.fetch;
     const originalUrl = process.env.SUPABASE_URL;
     const originalKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -47,8 +48,8 @@ test("new reviews are saved as approved", async () => {
     };
     try {
         const result = await writeReview(validReview);
-        assert.equal(savedReview.status, "approved");
-        assert.equal(result.status, "approved");
+        assert.equal(savedReview.status, "pending");
+        assert.equal(result.status, "pending");
     } finally {
         globalThis.fetch = originalFetch;
         if (originalUrl === undefined) delete process.env.SUPABASE_URL;
