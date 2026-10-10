@@ -4,12 +4,12 @@ export function ServiceCard({ service, index }) {
     const reduceMotion = useReducedMotion();
     return (<motion.article
       className="service-card"
-      initial={reduceMotion ? false : { opacity: 0, y: 42, scale: 0.94, rotateX: -3, rotateZ: index % 2 ? -3 : 3 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 36, scale: 0.92, rotateZ: index % 2 ? -5 : 5 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, rotateZ: 0 }}
       whileHover={reduceMotion ? undefined : { y: -12, rotateZ: index % 2 ? -1.5 : 1.5, scale: 1.035 }}
       whileTap={reduceMotion ? undefined : { y: -3, scale: 0.985 }}
-      viewport={{ once: true, amount: 0.12, margin: "0px 0px 90px 0px" }}
-      transition={{ type: "spring", stiffness: 280, damping: 19, mass: 0.55, delay: index * 0.045 }}
+      viewport={{ once: false, amount: 0.12, margin: "0px 0px 90px 0px" }}
+      transition={{ type: "spring", stiffness: 420, damping: 12, mass: 0.45, delay: index * 0.07 }}
       style={{ transformPerspective: 700 }}
     >
       <div className="service-media">
