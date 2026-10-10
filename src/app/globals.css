@@ -1012,6 +1012,73 @@ textarea:focus-visible { outline-color: #a7192b; }
 .consultation-form input::placeholder { color: #7b8593; }
 .consultation-form input:focus,
 .consultation-form select:focus { border-color: #a7192b; }
+.consultation-service-fieldset {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.consultation-service-fieldset legend {
+  margin-bottom: .7rem;
+  color: #29384d;
+  font-size: .7rem;
+  letter-spacing: .055em;
+}
+.consultation-service-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+}
+.consultation-form label.consultation-service-option {
+  position: relative;
+  display: block;
+  gap: 0;
+  cursor: pointer;
+}
+.consultation-service-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+.consultation-service-option-card {
+  display: grid;
+  min-height: 74px;
+  align-content: center;
+  gap: .3rem;
+  padding: .8rem .9rem;
+  border: 1px solid #d8dee7;
+  border-radius: 2px;
+  background: #fff;
+  color: #29384d;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+.consultation-service-option-card strong {
+  color: #171a20;
+  font-size: .8rem;
+  font-weight: 600;
+}
+.consultation-service-option-card > span {
+  color: #586477;
+  font-size: .7rem;
+  line-height: 1.45;
+}
+.consultation-service-option input:checked + .consultation-service-option-card {
+  border-color: #a7192b;
+  background: #fffafa;
+}
+.consultation-service-option input:focus-visible + .consultation-service-option-card {
+  outline: 2px solid #a7192b;
+  outline-offset: 3px;
+}
 .consultation-page-footer {
   border-color: rgba(255,255,255,.12);
   background: #142640;
@@ -1244,7 +1311,16 @@ textarea:focus-visible { outline-color: #a7192b; }
   overflow: hidden;
   background: #e9edf2;
 }
-.founder-story-photo img { object-fit: contain; object-position: center; }
+.founder-story-image::before {
+  position: absolute;
+  z-index: 0;
+  inset: -20px;
+  background: url("/assets/brand/founder-uma-shankar.webp") center / cover;
+  content: "";
+  filter: blur(22px) brightness(.72);
+  transform: scale(1.08);
+}
+.founder-story-photo img { z-index: 1; object-fit: contain; object-position: center; }
 .founder-story-photo > span {
   display: flex;
   min-height: 42px;
@@ -1461,6 +1537,87 @@ textarea:focus-visible { outline-color: #a7192b; }
   font-weight: 600;
   letter-spacing: .12em;
 }
+.service-gallery-section {
+  width: min(1240px, 100%);
+  margin: clamp(4rem, 8vw, 7rem) auto 0;
+}
+.service-gallery-intro {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(260px, .7fr);
+  align-items: end;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+.service-gallery-intro h2 {
+  margin: 1rem 0 0;
+  color: #142640;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.2rem, 4vw, 3.7rem);
+  letter-spacing: -.06em;
+  line-height: 1;
+}
+.service-gallery-intro > p {
+  max-width: 52ch;
+  margin: 0;
+  color: #586477;
+  font-size: .9rem;
+  line-height: 1.8;
+}
+.service-gallery {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+}
+.service-gallery-item {
+  width: min(100%, 860px);
+  margin: 0;
+}
+.service-gallery-image {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #e9edf2;
+}
+.service-gallery-image img { object-fit: contain; animation: serviceGalleryFade 400ms ease both; }
+@keyframes serviceGalleryFade { from { opacity: .35; } to { opacity: 1; } }
+.service-gallery-item figcaption {
+  padding-top: .75rem;
+  color: #586477;
+  font-size: .75rem;
+  line-height: 1.5;
+}
+.service-gallery-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .6rem;
+}
+.service-gallery-controls button {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid #d8dee7;
+  background: #fff;
+  color: #142640;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.service-gallery-controls button:hover { border-color: #a7192b; color: #a7192b; }
+.service-gallery-controls button:focus-visible {
+  outline: 2px solid #a7192b;
+  outline-offset: 4px;
+}
+.service-gallery-count { color: #586477; font-size: .68rem; font-variant-numeric: tabular-nums; }
+.service-gallery-controls .service-gallery-toggle {
+  width: auto;
+  height: auto;
+  margin-top: .5rem;
+  padding: .65rem .8rem;
+  font-size: .68rem;
+  white-space: nowrap;
+}
 .contact-page-content {
   display: grid;
   width: min(1240px, 100%);
@@ -1569,6 +1726,7 @@ textarea:focus-visible { outline-color: #a7192b; }
 .main-nav a[aria-current="page"]:not(.nav-cta) { color: #a7192b; }
 @media (max-width: 899px) {
   .service-detail { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .service-gallery-intro { grid-template-columns: 1fr; gap: 1rem; }
   .contact-page-content { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 600px) {
@@ -1576,10 +1734,14 @@ textarea:focus-visible { outline-color: #a7192b; }
   .contact-page-content,
   .reviews-page .feedback-panel { grid-template-columns: 1fr; }
   .service-detail-image { min-height: 80vw; }
+  .service-gallery { grid-template-columns: 1fr; }
+  .service-gallery-controls { flex-direction: row; justify-content: center; }
+  .service-gallery-controls .service-gallery-toggle { margin: 0 0 0 .5rem; }
   .contact-page-map,
   .contact-page-map iframe { min-height: 65vw; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .service-detail-video { display: none; }
+  .service-gallery-image img { animation: none; }
 }

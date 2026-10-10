@@ -7,6 +7,13 @@ const initialForm = {
     phone: "",
     serviceType: "Security services",
 };
+const serviceOptions = [
+    { value: "Security services", description: "On-site security for your property." },
+    { value: "Housekeeping", description: "Care for workplaces and shared spaces." },
+    { value: "Gardening", description: "Regular grounds and garden support." },
+    { value: "Labour & manpower", description: "Reliable people for operational needs." },
+    { value: "Other requests", description: "Open for discussion with our team." },
+];
 export function ConsultationForm() {
     const reduceMotion = useReducedMotion();
     const [form, setForm] = useState(initialForm);
@@ -69,15 +76,26 @@ export function ConsultationForm() {
           Phone
           <input autoComplete="tel" maxLength={24} name="phone" onChange={(event) => setForm((current) => ({ ...current, phone: event.target.value }))} placeholder="+91 00000 00000" required type="tel" value={form.phone}/>
         </label>
-        <label>
-          Service needed
-          <select name="serviceType" onChange={(event) => setForm((current) => ({ ...current, serviceType: event.target.value }))} value={form.serviceType}>
-            <option>Security services</option>
-            <option>Housekeeping</option>
-            <option>Gardening</option>
-            <option>Labour &amp; manpower</option>
-          </select>
-        </label>
+        <fieldset className="consultation-service-fieldset">
+          <legend>What do you need?</legend>
+          <div className="consultation-service-options">
+            {serviceOptions.map(({ value, description }) => (
+              <label className="consultation-service-option" key={value}>
+                <input
+                  checked={form.serviceType === value}
+                  name="serviceType"
+                  onChange={(event) => setForm((current) => ({ ...current, serviceType: event.target.value }))}
+                  type="radio"
+                  value={value}
+                />
+                <span className="consultation-service-option-card">
+                  <strong>{value}</strong>
+                  <span>{description}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
         <button className="submit-review consultation-submit" disabled={submitting} type="submit" aria-busy={submitting}>
           {submitting ? "Sending..." : <>Send request <span aria-hidden="true">↗</span></>}
         </button>

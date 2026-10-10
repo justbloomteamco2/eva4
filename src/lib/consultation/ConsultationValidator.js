@@ -4,6 +4,7 @@ const services = new Set([
     "Housekeeping",
     "Gardening",
     "Labour & manpower",
+    "Other requests",
 ]);
 export class ConsultationValidator {
     validate(data) {

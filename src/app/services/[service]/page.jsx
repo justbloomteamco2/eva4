@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ContactFooter } from "@/components/ContactFooter";
+import { ServiceGallery } from "@/components/ServiceGallery";
 import { SiteHeader } from "@/components/SiteHeader";
+import { getServiceGallery } from "@/lib/service-gallery";
 import { ContentService } from "@/services/ContentService";
 
 const services = new ContentService().getServices();
@@ -25,6 +27,7 @@ export default async function ServiceDetailPage({ params }) {
   const { service: serviceId } = await params;
   const service = services.find(({ id }) => id === serviceId);
   if (!service) notFound();
+  const gallery = getServiceGallery(service);
 
   return (
     <>
@@ -74,6 +77,16 @@ export default async function ServiceDetailPage({ params }) {
             )}
             <span>{service.number} / 04</span>
           </div>
+        </section>
+        <section className="service-gallery-section" aria-labelledby="service-gallery-title">
+          <div className="service-gallery-intro">
+            <div>
+              <p className="eyebrow"><span /> How we dedicate ourselves</p>
+              <h2 id="service-gallery-title">Care you can see.</h2>
+            </div>
+            <p>{service.commitment}</p>
+          </div>
+          <ServiceGallery title={service.title} photos={gallery} />
         </section>
       </main>
       <ContactFooter />

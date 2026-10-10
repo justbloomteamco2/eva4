@@ -6,6 +6,7 @@ import { sanitizeReview, writeReview, ReviewValidationError } from "../src/lib/r
 import { checkRateLimit } from "../src/lib/security/rate-limit.js";
 import { ConsultationService } from "../src/lib/consultation/ConsultationService.js";
 import { ConsultationValidator } from "../src/lib/consultation/ConsultationValidator.js";
+import { getServiceGallery } from "../src/lib/service-gallery.js";
 
 const validReview = {
     name: "Jamie Client",
@@ -134,6 +135,7 @@ test("consultation requests persist before notification and retain failed notifi
             phone: "+91 98765 43210",
             serviceType: "Housekeeping",
         });
+
         assert.deepEqual(result, { id: "lead-123", notificationSent: false });
         assert.equal(events[0].method, "POST");
         assert.equal(events[0].payload.email, "client@example.com");
@@ -147,4 +149,51 @@ test("consultation requests persist before notification and retain failed notifi
         if (originalKey === undefined) delete process.env.SUPABASE_SERVICE_ROLE_KEY;
         else process.env.SUPABASE_SERVICE_ROLE_KEY = originalKey;
     }
+});
+
+test("consultation validation accepts other requests and rejects unsupported services", () => {
+    const validator = new ConsultationValidator();
+    const request = {
+        name: "Client",
+        email: "client@example.com",
+        phone: "+91 98765 43210",
+        serviceType: "Other requests",
+    };
+    assert.deepEqual(validator.validate(request), request);
+    assert.throws(
+        () => validator.validate({ ...request, serviceType: "Unlisted service" }),
+        /Select one of the listed services/
+    );
+});
+
+test("service galleries discover images added to dedicated folders", () => {
+    const gardening = {
+        id: "gardening",
+        title: "Gardening",
+        gallery: [
+            { src: "/assets/services/gardening/gardening-1.jpeg", alt: "Garden care", caption: "Garden care" },
+            { src: "/assets/services/gardening/gardening-2.jpeg", alt: "Plant care", caption: "Plant care" },
+            { src: "/assets/services/gardening/gardening-3.jpeg", alt: "Grounds care", caption: "Grounds care" },
+            { src: "/assets/services/gardening/garden.webp", alt: "Green spaces", caption: "Green spaces" },
+        ],
+    };
+    const gallery = getServiceGallery(gardening);
+
+    assert.deepEqual(
+        gallery.map(({ src }) => src),
+        [
+            "/assets/services/gardening/gardening-1.jpeg",
+            "/assets/services/gardening/gardening-2.jpeg",
+            "/assets/services/gardening/gardening-3.jpeg",
+            "/assets/services/gardening/garden.webp",
+        ]
+    );
+    assert.ok(gallery.every(({ alt, caption }) => alt && caption));
+
+    const discovered = getServiceGallery({ ...gardening, gallery: [] });
+    assert.deepEqual(
+        discovered.map(({ src }) => src).sort(),
+        gallery.map(({ src }) => src).sort()
+    );
+    assert.ok(discovered.every(({ alt, caption }) => alt && caption));
 });
