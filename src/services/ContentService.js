@@ -56,11 +56,6 @@ const services = [
         alt: "A cleaner operating a floor-cleaning machine",
         caption: "Attention to the details",
       },
-      {
-        src: "/assets/services/housekeeping/housekeeping.webp",
-        alt: "A woman sweeping an outdoor stone courtyard",
-        caption: "Everyday site upkeep",
-      },
     ],
   },
   {
@@ -92,11 +87,6 @@ const services = [
         alt: "A groundskeeper watering a landscaped lawn",
         caption: "Maintaining outdoor grounds",
       },
-      {
-        src: "/assets/services/gardening/garden.webp",
-        alt: "A lush planted wall at Terminal 2 of Bengaluru airport",
-        caption: "Welcoming green spaces",
-      },
     ],
   },
   {
@@ -122,11 +112,6 @@ const services = [
         src: "/assets/services/manpower/manpower-2.jpeg",
         alt: "Team members sorting and packing items in a workplace",
         caption: "Reliable day-to-day manpower",
-      },
-      {
-        src: "/assets/services/manpower/workforce.webp",
-        alt: "Workers carrying metal poles through a Mumbai shop entrance",
-        caption: "People ready to support your operation",
       },
     ],
   },

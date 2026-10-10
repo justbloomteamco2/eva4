@@ -174,7 +174,6 @@ test("service galleries discover images added to dedicated folders", () => {
             { src: "/assets/services/gardening/gardening-1.jpeg", alt: "Garden care", caption: "Garden care" },
             { src: "/assets/services/gardening/gardening-2.jpeg", alt: "Plant care", caption: "Plant care" },
             { src: "/assets/services/gardening/gardening-3.jpeg", alt: "Grounds care", caption: "Grounds care" },
-            { src: "/assets/services/gardening/garden.webp", alt: "Green spaces", caption: "Green spaces" },
         ],
     };
     const gallery = getServiceGallery(gardening);
@@ -185,7 +184,6 @@ test("service galleries discover images added to dedicated folders", () => {
             "/assets/services/gardening/gardening-1.jpeg",
             "/assets/services/gardening/gardening-2.jpeg",
             "/assets/services/gardening/gardening-3.jpeg",
-            "/assets/services/gardening/garden.webp",
         ]
     );
     assert.ok(gallery.every(({ alt, caption }) => alt && caption));
