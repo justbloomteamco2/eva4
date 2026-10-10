@@ -77,13 +77,15 @@ The deployed Supabase project must contain the schema and function from:
    the default status for new reviews to `pending`.
 4. `supabase/migrations/20261010140000_add_consultation_request_details.sql` —
    adds the optional details field for “Other requests”.
+5. `supabase/migrations/20261010150000_allow_other_consultation_requests.sql` —
+   allows “Other requests” as a consultation service type.
 
 The first two migrations were applied through the Supabase SQL Editor, per the
-previous handover. The consultation-details migration has now also been applied
-through the SQL Editor to the connected project. Verify the moderation
-migration is applied to the production project before deploying. The app uses
-the service-role key only on server routes. Do not expose private consultation
-records through a public read policy.
+previous handover. The consultation-details migration was also applied through
+the SQL Editor to the connected project. Apply the moderation and “Other
+requests” migrations to any target project that does not yet have them. The app
+uses the service-role key only on server routes. Do not expose private
+consultation records through a public read policy.
 
 ## Deploying from GitHub
 

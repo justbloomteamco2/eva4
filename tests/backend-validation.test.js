@@ -176,11 +176,13 @@ test("consultation requests persist when email notification is not configured", 
             name: "Client",
             email: "client@example.com",
             phone: "+91 98765 43210",
-            serviceType: "Security services",
+            serviceType: "Other requests",
         });
 
         assert.deepEqual(result, { id: "lead-456", notificationSent: false });
         assert.equal(events[0].method, "POST");
+        assert.equal(events[0].payload.service_type, "Other requests");
+        assert.equal(events[0].payload.request_details, null);
         assert.equal(events[1].method, "PATCH");
         assert.deepEqual(events[1].payload, { notification_status: "failed" });
     } finally {
