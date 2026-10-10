@@ -16,6 +16,7 @@ export class ConsultationValidator {
         const email = typeof input.email === "string" ? input.email.trim() : "";
         const phone = typeof input.phone === "string" ? input.phone.trim() : "";
         const serviceType = typeof input.serviceType === "string" ? input.serviceType : "";
+        const requestDetails = input.requestDetails === undefined ? "" : input.requestDetails;
         if (!name || name.length > 120 || /[\u0000-\u001f\u007f]/.test(name)) {
             throw new ConsultationValidationError("Enter a valid name (up to 120 characters).");
         }
@@ -29,6 +30,16 @@ export class ConsultationValidator {
         if (!services.has(serviceType)) {
             throw new ConsultationValidationError("Select one of the listed services.");
         }
-        return { name, email, phone, serviceType };
+        if (typeof requestDetails !== "string" || requestDetails.length > 1000 ||
+            /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(requestDetails)) {
+            throw new ConsultationValidationError("Keep additional details under 1,000 characters and remove unsupported control characters.");
+        }
+        return {
+            name,
+            email,
+            phone,
+            serviceType,
+            requestDetails: serviceType === "Other requests" ? requestDetails.trim() : "",
+        };
     }
 }

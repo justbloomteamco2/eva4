@@ -127,18 +127,60 @@ test("consultation requests persist before notification and retain failed notifi
     };
     console.error = () => {};
     try {
-        const failedEmail = { sendEmail: async () => { throw new Error("delivery failed"); } };
+        let sentEmail;
+        const failedEmail = { sendEmail: async (message) => { sentEmail = message; throw new Error("delivery failed"); } };
         const service = new ConsultationService(failedEmail, new ConsultationValidator());
         const result = await service.processConsultation({
             name: "Client",
             email: "client@example.com",
             phone: "+91 98765 43210",
-            serviceType: "Housekeeping",
+            serviceType: "Other requests",
+            requestDetails: "Weekend grounds maintenance",
         });
 
         assert.deepEqual(result, { id: "lead-123", notificationSent: false });
         assert.equal(events[0].method, "POST");
         assert.equal(events[0].payload.email, "client@example.com");
+        assert.equal(events[0].payload.service_type, "Other requests");
+        assert.equal(events[0].payload.request_details, "Weekend grounds maintenance");
+        assert.match(sentEmail.text, /Additional details: Weekend grounds maintenance/);
+        assert.equal(events[1].method, "PATCH");
+        assert.deepEqual(events[1].payload, { notification_status: "failed" });
+    } finally {
+        globalThis.fetch = originalFetch;
+        console.error = originalError;
+        if (originalUrl === undefined) delete process.env.SUPABASE_URL;
+        else process.env.SUPABASE_URL = originalUrl;
+        if (originalKey === undefined) delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+        else process.env.SUPABASE_SERVICE_ROLE_KEY = originalKey;
+    }
+});
+
+test("consultation requests persist when email notification is not configured", async () => {
+    const originalFetch = globalThis.fetch;
+    const originalUrl = process.env.SUPABASE_URL;
+    const originalKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const originalError = console.error;
+    const events = [];
+    process.env.SUPABASE_URL = "https://project.supabase.co";
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "test-service-key";
+    globalThis.fetch = async (_url, options) => {
+        events.push({ method: options.method, payload: JSON.parse(options.body) });
+        if (options.method === "POST") return Response.json([{ id: "lead-456" }], { status: 201 });
+        return new Response(null, { status: 204 });
+    };
+    console.error = () => {};
+    try {
+        const service = new ConsultationService(null, new ConsultationValidator());
+        const result = await service.processConsultation({
+            name: "Client",
+            email: "client@example.com",
+            phone: "+91 98765 43210",
+            serviceType: "Security services",
+        });
+
+        assert.deepEqual(result, { id: "lead-456", notificationSent: false });
+        assert.equal(events[0].method, "POST");
         assert.equal(events[1].method, "PATCH");
         assert.deepEqual(events[1].payload, { notification_status: "failed" });
     } finally {
@@ -159,10 +201,22 @@ test("consultation validation accepts other requests and rejects unsupported ser
         phone: "+91 98765 43210",
         serviceType: "Other requests",
     };
-    assert.deepEqual(validator.validate(request), request);
+    assert.deepEqual(validator.validate(request), { ...request, requestDetails: "" });
+    assert.deepEqual(
+        validator.validate({ ...request, requestDetails: "  Weekend grounds maintenance  " }),
+        { ...request, requestDetails: "Weekend grounds maintenance" }
+    );
+    assert.equal(
+        validator.validate({ ...request, serviceType: "Gardening", requestDetails: "Ignored details" }).requestDetails,
+        ""
+    );
     assert.throws(
         () => validator.validate({ ...request, serviceType: "Unlisted service" }),
         /Select one of the listed services/
+    );
+    assert.throws(
+        () => validator.validate({ ...request, requestDetails: "x".repeat(1001) }),
+        /under 1,000 characters/
     );
 });
 

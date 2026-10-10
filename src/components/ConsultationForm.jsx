@@ -6,6 +6,7 @@ const initialForm = {
     email: "",
     phone: "",
     serviceType: "Security services",
+    requestDetails: "",
 };
 const serviceOptions = [
     { value: "Security services", description: "On-site security for your property." },
@@ -84,7 +85,11 @@ export function ConsultationForm() {
                 <input
                   checked={form.serviceType === value}
                   name="serviceType"
-                  onChange={(event) => setForm((current) => ({ ...current, serviceType: event.target.value }))}
+                  onChange={(event) => setForm((current) => ({
+                    ...current,
+                    serviceType: event.target.value,
+                    requestDetails: event.target.value === "Other requests" ? current.requestDetails : "",
+                  }))}
                   type="radio"
                   value={value}
                 />
@@ -96,6 +101,21 @@ export function ConsultationForm() {
             ))}
           </div>
         </fieldset>
+        {form.serviceType === "Other requests" && (
+          <label className="consultation-request-details">
+            Tell us what you need <span>(optional)</span>
+            <textarea
+              aria-describedby="consultation-request-details-hint"
+              maxLength={1000}
+              name="requestDetails"
+              onChange={(event) => setForm((current) => ({ ...current, requestDetails: event.target.value }))}
+              placeholder="Share a few details about the service or support you have in mind."
+              rows={4}
+              value={form.requestDetails}
+            />
+            <span id="consultation-request-details-hint">Up to 1,000 characters.</span>
+          </label>
+        )}
         <button className="submit-review consultation-submit" disabled={submitting} type="submit" aria-busy={submitting}>
           {submitting ? "Sending..." : <>Send request <span aria-hidden="true">↗</span></>}
         </button>

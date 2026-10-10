@@ -460,7 +460,8 @@ textarea:focus-visible { outline: 2px solid var(--brand-clementine); outline-off
 .consultation-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem; }
 .consultation-form label { display: grid; gap: .55rem; color: rgba(255,255,255,.83); font-size: .7rem; letter-spacing: .055em; }
 .consultation-form input,
-.consultation-form select {
+.consultation-form select,
+.consultation-form textarea {
   width: 100%;
   min-height: 50px;
   padding: .8rem .9rem;
@@ -470,6 +471,17 @@ textarea:focus-visible { outline: 2px solid var(--brand-clementine); outline-off
   color: var(--brand-white);
   font-size: .85rem;
 }
+.consultation-form textarea { min-height: 112px; resize: vertical; }
+.consultation-request-details { grid-column: 1 / -1; }
+.consultation-request-details > span { color: #7b8593; font-size: .68rem; }
+.consultation-request-details textarea {
+  border-color: #d8dee7;
+  border-radius: 2px;
+  background: #fff;
+  color: #171a20;
+}
+.consultation-request-details textarea::placeholder { color: #7b8593; }
+.consultation-request-details textarea:focus { border-color: #a7192b; }
 .consultation-form input::placeholder { color: rgba(255,255,255,.42); }
 .consultation-form input:focus,
 .consultation-form select:focus { border-color: var(--brand-clementine); }
@@ -1613,6 +1625,7 @@ textarea:focus-visible { outline-color: #a7192b; }
 .service-gallery-controls .service-gallery-toggle {
   width: auto;
   height: auto;
+  min-height: 44px;
   margin-top: .5rem;
   padding: .65rem .8rem;
   font-size: .68rem;

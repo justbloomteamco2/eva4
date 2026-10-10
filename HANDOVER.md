@@ -11,8 +11,8 @@ document or commit `.env.local`.
 - Automated checks: `npm test`.
 - Hosting target: Vercel or another Next.js serverless host. Do not configure
   static export or GitHub Pages for this application.
-- Database: Supabase project is provisioned. Apply all migrations listed below
-  before deploying this update.
+- Database: Supabase project is provisioned. Ensure all migrations listed below
+  are applied to the target project before deploying code that relies on them.
 - Feedback: public submissions remain pending until verified and approved in
   the Supabase `reviews` table. Only approved feedback is public.
 - Consultation: submissions are saved to Supabase before an email notification
@@ -75,10 +75,14 @@ The deployed Supabase project must contain the schema and function from:
    3 for new submissions).
 3. `supabase/migrations/20261009180000_public_review_moderation.sql` — sets
    the default status for new reviews to `pending`.
+4. `supabase/migrations/20261010140000_add_consultation_request_details.sql` —
+   adds the optional details field for “Other requests”.
 
-The first two migrations were applied through the Supabase SQL Editor. Apply
-the new moderation migration before deploying this update. The app uses the
-service-role key only on server routes. Do not expose private consultation
+The first two migrations were applied through the Supabase SQL Editor, per the
+previous handover. The consultation-details migration has now also been applied
+through the SQL Editor to the connected project. Verify the moderation
+migration is applied to the production project before deploying. The app uses
+the service-role key only on server routes. Do not expose private consultation
 records through a public read policy.
 
 ## Deploying from GitHub

@@ -9,10 +9,6 @@ export async function POST(request) {
     const apiKey = process.env.RESEND_API_KEY;
     const from = process.env.RESEND_FROM_EMAIL;
     const to = process.env.CONSULTATION_TO_EMAIL;
-    if (!apiKey || !from || !to) {
-        console.error("Consultation email is not configured. Set RESEND_API_KEY, RESEND_FROM_EMAIL, and CONSULTATION_TO_EMAIL.");
-        return NextResponse.json({ error: "Consultation requests are temporarily unavailable." }, { status: 503 });
-    }
     let allowed;
     try {
         allowed = await checkRateLimit(request, "consultations", 5, 900);
@@ -37,7 +33,8 @@ export async function POST(request) {
         }
         throw error;
     }
-    const service = new ConsultationService(new ResendEmailService(apiKey, from, to), new ConsultationValidator());
+    const emailService = apiKey && from && to ? new ResendEmailService(apiKey, from, to) : null;
+    const service = new ConsultationService(emailService, new ConsultationValidator());
     try {
         const result = await service.processConsultation(payload);
         return NextResponse.json({
